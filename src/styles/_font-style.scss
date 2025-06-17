@@ -1,0 +1,79 @@
+@use '_functions' as f;
+
+.h1 {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 86%;
+  font-size: f.mobile-vw(56px);
+
+  @include f.desktop {
+    font-size: f.desktop-vw(160px);
+    line-height: 85%;
+  }
+
+  &.vh {
+    font-size: f.mobile-vh(56px);
+
+    @include f.desktop {
+      font-size: f.desktop-vh(160px);
+    }
+  }
+}
+
+.h2 {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 86%;
+  font-size: f.mobile-vw(56px);
+
+  @include f.desktop {
+    font-size: f.desktop-vw(96px);
+    line-height: 83%;
+  }
+
+  &.vh {
+    font-size: f.mobile-vh(56px);
+
+    @include f.desktop {
+      font-size: f.desktop-vh(96px);
+    }
+  }
+}
+
+.h3 {
+  font-stretch: expanded;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 100%;
+  font-size: f.mobile-vw(20px);
+  letter-spacing: -0.01em;
+
+  @include f.desktop {
+    letter-spacing: 0.01em;
+    font-size: f.desktop-vw(52px);
+  }
+
+  &.vh {
+    font-size: f.mobile-vh(20px);
+
+    @include f.desktop {
+      font-size: f.desktop-vh(52px);
+    }
+  }
+}
+
+.h4 {
+  font-stretch: expanded;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 100%;
+  font-size: f.mobile-vw(20px);
+
+  @include f.desktop {
+    font-size: f.desktop-vw(28px);
+    letter-spacing: -0.01em;
+  }
+}

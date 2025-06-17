@@ -1,0 +1,12 @@
+@use 'colors';
+@use 'variables';
+@use 'functions';
+@use 'font-style';
+
+section {
+  margin-bottom: functions.mobile-vw(80px);
+
+  @include functions.desktop {
+    margin-bottom: functions.desktop-vw(160px);
+  }
+}
