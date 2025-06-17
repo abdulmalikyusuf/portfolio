@@ -16,7 +16,9 @@ import Sass from '@/icons/Sass.svg'
 import Git from '@/icons/Git.svg'
 import Redux from '@/icons/Redux.svg'
 import Nodejs from '@/icons/Node.js.svg'
-import DRF from '@/icons/Django Rest.svg'
+import DRF from '@/icons/DRF.svg'
+import Docker from '@/icons/Docker.svg'
+import TailwindCSS from '@/icons/TailwindCSS.svg'
 import { AnimatedIcon } from '../../animated-icon'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -34,6 +36,7 @@ const stacks = {
     { label: 'Gulp', icon: GulpJs },
     { label: 'Tanstack Router', icon: Javascript },
     { label: 'HTML5', icon: HTML5 },
+    { label: 'TailwindCSS', icon: TailwindCSS },
     { label: 'CSS3', icon: CSS3 },
   ],
   backend: [
@@ -42,7 +45,7 @@ const stacks = {
   ],
   tools: [
     { label: 'GIT', icon: Git },
-    { label: 'Docker', icon: Typescript },
+    { label: 'Docker', icon: Docker },
   ],
 }
 export function TechStack() {
