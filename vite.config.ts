@@ -26,4 +26,7 @@ export default defineConfig({
       ignored: ['**/.history/**'],
     },
   },
+  build: {
+    outDir: 'build',
+  },
 })
