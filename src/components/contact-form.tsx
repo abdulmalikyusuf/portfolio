@@ -51,10 +51,11 @@ export function ContactForm() {
           className={cn(
             'group relative rounded-xl pr-5 overflow-hidden',
             'before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-5 before:border-[var(--g16)] before:border before:border-r-0 before:rounded-l-xl before:block',
-            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block'
+            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block',
+            'focus-within:outline focus-within:outline-[var(--pink)]'
           )}
         >
-          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-[2]  group-hover:z-0' />
+          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-0' />
           <div
             className={cn(
               'before:absolute before:bg-[linear-gradient(90deg,_var(--g16)_20%,_var(--g00)_50%,_var(--g00)_70%,_var(--g16)_100%)] before:top-0 before:inset-x-[21px] before:z-10 before:h-px before:block',
@@ -64,18 +65,20 @@ export function ContactForm() {
           <select
             name='subject'
             id='subject'
-            className='rounded-xl h-14 py-[18px] px-4 text-[#ff98a2] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3]'
+            required
+            defaultValue='job'
+            className='w-full rounded-xl h-14 py-[18px] px-4 text-[#ff98a2] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3] focus:border-0 focus:ring-0 focus:outline-0'
           >
-            <option value='job' className=''>
+            <option value='job' className='w-full'>
               Job Opportunity
             </option>
-            <option value='freelance' className=''>
+            <option value='freelance' className='w-full'>
               Freelance Project
             </option>
-            <option value='collaboration' className=''>
+            <option value='collaboration' className='w-full'>
               Collaboration
             </option>
-            <option value='other' className=''>
+            <option value='other' className='w-full'>
               Other
             </option>
           </select>
@@ -85,17 +88,19 @@ export function ContactForm() {
           className={cn(
             'group relative rounded-xl overflow-hidden',
             'before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-5 before:border-[var(--g16)] before:border before:border-r-0 before:rounded-l-xl before:block',
-            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block'
+            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block',
+            'focus-within:outline focus-within:outline-[var(--pink)]'
           )}
         >
-          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-[2]  group-hover:z-0' />
+          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-0' />
 
           <input
             type='email'
             name='email'
             id='email'
+            required
             placeholder='Your email'
-            className='rounded-xl h-14 w-full py-[18px] px-4 text-[#ff98a2] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3]'
+            className='rounded-xl h-14 w-full py-[18px] px-4 text-[#ff98a2] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3] focus:border-0 focus:ring-0 focus:outline-0'
           />
           <div
             className={cn(
@@ -109,17 +114,19 @@ export function ContactForm() {
           className={cn(
             'group relative rounded-xl overflow-hidden',
             'before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-5 before:border-[var(--g16)] before:border before:border-r-0 before:rounded-l-xl before:block',
-            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block'
+            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block',
+            'focus-within:outline focus-within:outline-[var(--pink)]'
           )}
         >
-          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-[2]  group-hover:z-0' />
+          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-0' />
 
           <input
             type='text'
             name='name'
             id='name'
+            required
             placeholder='Your name'
-            className='rounded-xl h-14 w-full py-[18px] px-4 text-[#ff98a2] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3]'
+            className='rounded-xl h-14 w-full py-[18px] px-4 text-[#ff98a2] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3] focus:bg-transparent focus:border-0 focus:ring-0 focus:outline-0'
           />
           <div
             className={cn(
@@ -135,16 +142,17 @@ export function ContactForm() {
             'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block'
           )}
         >
-          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-[2]  group-hover:z-0' />
+          <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-0' />
 
           <textarea
             cols={50}
             rows={6}
+            required
             id='message'
             name='message'
             placeholder='Your message'
             className={cn(
-              'rounded-xl w-full py-[18px] px-4 text-[var(--pink)] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3] resize-none',
+              'rounded-xl w-full h-full py-[18px] px-4 text-[var(--pink)] backdrop-blur-[28px] backdrop-opacity-10 font-light text-base leading-[1.3] resize-none',
               'focus-within:outline-[#ff98a2] focus:outline-[var(--pink)] focus-within:border-0 focus:border-0 focus:ring-0 focus-within:ring0'
             )}
           />
@@ -159,7 +167,8 @@ export function ContactForm() {
           className={cn(
             'group relative overflow-hidden rounded-xl col-span-full',
             'before:absolute before:inset-y-0 before:left-0 before:z-10 before:w-5 before:border-[var(--g16)] before:border before:border-r-0 before:rounded-l-xl before:block',
-            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block'
+            'after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-5 after:border-[var(--g16)] after:border after:border-l-0 after:rounded-r-xl before:block',
+            'focus-within:outline focus-within:outline-[var(--pink)]'
           )}
         >
           <p className='absolute inset-0 bg-[#fff] opacity-[.12] z-[2] group-hover:z-0' />
@@ -171,7 +180,7 @@ export function ContactForm() {
           />
           <button
             type='submit'
-            className='relative group-contact-button rounded-xl h-14 w-full overflow-y-hidden py-[18px] px-4 text-[var(--pink)] z-10 backdrop-blur-[28px] backdrop-opacity-10 hover:backdrop-opacity-100 font-medium text-base leading-[1.3] flex justify-center items-center'
+            className='relative group-contact-button rounded-xl h-14 w-full overflow-y-hidden py-[18px] px-4 text-[var(--pink)] z-10 backdrop-blur-[28px] backdrop-opacity-10 hover:backdrop-opacity-100 font-medium text-base leading-[1.3] flex justify-center items-center focus:border-0 focus:ring-0 focus:outline-0'
           >
             {pending ? (
               <svg

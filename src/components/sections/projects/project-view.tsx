@@ -39,7 +39,7 @@ export function ProjectViews() {
   }, [])
 
   return (
-    <div ref={ref} className='size-full'>
+    <div ref={ref} className='size-full touch-none'>
       <Canvas
         camera={{
           position: [0, 0, PLANE_OFFSET],

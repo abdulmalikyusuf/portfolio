@@ -42,15 +42,18 @@ export function MouseHandler() {
     <>
       <animated.div
         className={cn(
-          'fixed rounded-full top-0 left-0 [transform:translateX(50%)_translateY(50%)] pointer-events-none z-[9999] border-2 border-primary size-12',
-          !initialized && 'hidden'
+          'hidden fixed rounded-full top-0 left-0 [transform:translateX(50%)_translateY(50%)] pointer-events-none z-[9999] border-2 border-primary size-12',
+          initialized ? 'lg:block' : 'lg:!hidden'
         )}
         style={{
           transform: circleTrail[0].xy.to(transform),
         }}
       />
       <animated.div
-        className='fixed rounded-full top-0 left-0 [transform:translateX(50%)_translateY(50%)] pointer-events-none z-[9999] bg-primary size-2'
+        className={cn(
+          'hidden fixed rounded-full top-0 left-0 [transform:translateX(50%)_translateY(50%)] pointer-events-none z-[9999] bg-primary size-2',
+          initialized ? 'lg:block' : 'lg:!hidden'
+        )}
         style={{
           transform: dotTrail[1].xy.to(transform),
         }}

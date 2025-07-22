@@ -1,7 +1,7 @@
 import { cubicBezier } from 'motion'
 import { useTransform, useScroll, motion } from 'motion/react'
 
-import { DeliveringProjects } from './components/sections/about/delivering'
+import { About } from './components/sections/about'
 import { HeroSection } from './components/sections/hero'
 import { SelectedProjects } from './components/sections/projects'
 import { TechStack } from './components/sections/stack'
@@ -40,13 +40,10 @@ export function Main() {
         </div>
         <main className='grid grid-cols-[repeat(36,1fr)] *:col-start-2 *:-col-end-2 relative h-full'>
           <HeroSection />
-          <DeliveringProjects />
+          <About />
           <TechStack />
           <Experiences />
           <SelectedProjects />
-          {/* <div className='relative !col-start-6 !-col-end-1'>
-            <StickyImages />
-          </div> */}
           <Footer />
         </main>
       </div>

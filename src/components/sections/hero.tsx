@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { gsap } from 'gsap'
-import { SplitText } from 'gsap/SplitText' // Make sure you have SplitText
+import { SplitText } from 'gsap/SplitText'
 import { useGSAP } from '@gsap/react'
 
 import { useFontsReady } from '@/hooks/use-font-loaded'
@@ -15,33 +15,19 @@ export function HeroSection() {
   useGSAP(
     () => {
       if (isFontsReady && textRef.current) {
-        // Ensure SplitText runs only after fonts are loaded
         const split = new SplitText(textRef.current, {
           type: 'lines',
           linesClass: 'split-line',
         })
 
-        // Limit to a maximum of two lines
-        // if (split.lines.length > 2) {
-        //   for (let i = 2; i < split.lines.length; i++) {
-        //     gsap.set(split.lines[i], { display: 'none' })
-        //   }
-        // }
+        gsap.from(split.lines, {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+          stagger: 0.2,
+          delay: 0.2,
+        })
 
-        // Optional: Animate the first two lines
-        const linesToAnimate = split.lines.slice(0, 2)
-        if (linesToAnimate.length > 0) {
-          gsap.from(linesToAnimate, {
-            opacity: 0,
-            y: 20,
-            duration: 0.5,
-            stagger: 0.2,
-            delay: 0.2, // Small delay to ensure rendering after split
-          })
-        }
-
-        // It's good practice to return a cleanup function from useGSAP
-        // to revert SplitText when the component unmounts or dependencies change.
         return () => {
           if (split && typeof split.revert === 'function') {
             split.revert()
@@ -49,43 +35,12 @@ export function HeroSection() {
         }
       }
     },
-    { dependencies: [isFontsReady], scope: containerRef } // Re-run when fontsLoaded changes
+    { dependencies: [isFontsReady], scope: containerRef }
   )
 
   return (
     <section className='relative overflow-hidden mb-20'>
-      <svg
-        id='banner-arrow-svg'
-        width='376'
-        height='111'
-        viewBox='0 0 376 111'
-        fill='transparent'
-        xmlns='http://www.w3.org/2000/svg'
-        className='absolute bottom-20 left-1/2 -translate-x-1/2 z-0'
-        style={{
-          opacity: 1,
-          visibility: 'inherit',
-          fill: 'rgba(255, 255, 255, 0.03)',
-          translate: 'none',
-          rotate: 'none',
-          scale: 'none',
-          transform: 'translate3d(-188px, 283.573px, 0px)',
-        }}
-      >
-        <path
-          className='svg-arrow svg-arrow-1'
-          d='M1 1V39.9286L188 110V70.6822L1 1Z'
-          stroke='#2C2C2C'
-          style={{ strokeDashoffset: 0, strokeDasharray: 477.505 }}
-        ></path>
-        <path
-          className='svg-arrow svg-arrow-2'
-          d='M375 1V39.9286L188 110V70.6822L375 1Z'
-          stroke='#2C2C2C'
-          style={{ strokeDashoffset: 0, strokeDasharray: 477.505 }}
-        ></path>
-      </svg>
-      <div className='container md:h-[100svh] min-h-[530px] max-md:pt-20 max-md:pb-10 flex justify-between items-center max-md:flex-col gap-y-10'>
+      <div className='container md:h-[100svh] md:max-h-[880px] min-h-[530px] max-md:pt-20 max-md:pb-10 flex justify-between items-center max-md:flex-col gap-y-10'>
         <div
           ref={containerRef}
           className='max-md:grow max-md:flex flex-col justify-center items-start max-w-2xl'

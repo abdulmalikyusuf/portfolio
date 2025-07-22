@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, CSSProperties } from 'react'
-import { animated, useSpring, SpringValue } from '@react-spring/web'
+import { animated, useSpring, SpringValue, useTrail } from '@react-spring/web'
 import {
   useSpring as useSpringMotion,
   useAnimate,
@@ -31,6 +31,9 @@ function Slides() {
   const sliderRef = useRef<HTMLDivElement>(null)
   const initialScrollLeft = useRef(0)
 
+  const { contextSafe } = useGSAP({ scope: containerRef.current! })
+  const [scope, animate] = useAnimate()
+
   let enterTween: gsap.core.Tween | null = null
   let leaveTween: gsap.core.Tween | null = null
 
@@ -39,39 +42,22 @@ function Slides() {
     : window.innerWidth
   const minScrollLeft = width * SLIDE_PADDING_RATIO
 
-  const scrollLeft = useSpringMotion(width * 0.1)
-
-  scrollLeft.on('change', (latestValue) => {
-    if (sliderRef.current) sliderRef.current.scrollLeft = latestValue
-  })
-  // const [_, setScrollLeft] = useSpring(() => ({
-  //   immediate: false,
-  //   scrollLeft: width * 0.1,
-  //   onChange: (props) => {
-  //     if (sliderRef.current) sliderRef.current.scrollLeft = props.value.scrollLeft
-  //   },
-  //   config: {
-  //     mass: 1,
-  //     tension: 200,
-  //   },
-  // }))
-
   const { showSlide } = useSpring({
     showSlide: mouseStatus === 'mousedown' ? 1 : 0,
   })
 
-  const onMouseMove = (event: MouseEvent | TouchEvent) => {
+  const onMouseMove = (event: PointerEvent) => {
     if (mouseStatusRef.current === 'mousedown') {
-      const x = 'clientX' in event ? event.clientX : event.touches[0].clientX
+      const x = event.clientX
       const amountToScroll =
         initialScrollLeft.current - (x - mouseDownPosRef.current.x) * 2
-      // setScrollLeft.start({ scrollLeft: amountToScroll })
-      scrollLeft.set(amountToScroll)
+      if (sliderRef.current) sliderRef.current.scrollLeft = amountToScroll
 
-      const slideWidth = window.innerWidth * SLIDE_WIDTH_RATIO
+      const slideWidth = width * SLIDE_WIDTH_RATIO
+
       const currentActiveSlideIndex = clamp(
         Math.floor(amountToScroll / slideWidth) +
-          (amountToScroll % slideWidth > slideWidth * 0.3 ? 1 : 0),
+          (amountToScroll % slideWidth > slideWidth * 0.5 ? 1 : 0),
         0,
         data.length - 1
       )
@@ -83,16 +69,10 @@ function Slides() {
   }
 
   const snapToCurrenActiveSlide = useCallback(() => {
-    scrollLeft.set(
-      minScrollLeft +
-        activeSlideIndexRef.current * (window.innerWidth * SLIDE_WIDTH_RATIO)
-    )
-    // setScrollLeft.start({
-    //   scrollLeft:
-    //     minScrollLeft +
-    //     activeSlideIndexRef.current * (window.innerWidth * SLIDE_WIDTH_RATIO),
-    //   immediate: true,
-    // })
+    const slideWidth = width * SLIDE_WIDTH_RATIO
+    if (sliderRef.current)
+      sliderRef.current.scrollLeft =
+        minScrollLeft + activeSlideIndexRef.current * slideWidth
   }, [minScrollLeft, activeSlideIndexRef])
 
   useEffect(() => {
@@ -111,18 +91,18 @@ function Slides() {
   }, [activeSlideIndex])
 
   useEffect(() => {
-    containerRef.current?.addEventListener('pointermove', onMouseMove)
+    if (!containerRef.current) return
+    containerRef.current.addEventListener('pointermove', onMouseMove)
 
     return () => {
-      containerRef.current?.removeEventListener('pointermove', onMouseMove)
+      if (containerRef.current)
+        containerRef.current.removeEventListener('pointermove', onMouseMove)
     }
-  }, [])
+  }, [containerRef.current])
 
   /**
    * Render slides
    */
-
-  const { contextSafe } = useGSAP({ scope: containerRef.current! })
 
   const handlePointerEnter = contextSafe(() => {
     if ((enterTween && enterTween.isActive()) || mouseStatusRef.current === 'mousedown')
@@ -226,7 +206,7 @@ function Slides() {
             strokeWidth='2'
             strokeLinecap='round'
             strokeLinejoin='round'
-            className='size-10 hidden'
+            className='size-4 lg:size-6 xl:size-10 hidden'
           >
             <path d='M15 3h6v6' />
             <path d='M10 14 21 3' />
@@ -270,15 +250,23 @@ function Slides() {
       className='absolute inset-0 overflow-hidden flex items-end'
       ref={containerRef}
       style={{
+        touchAction: 'none',
         background: showSlide.to((value) => `rgba(0, 0, 0, ${value * 0.3})`),
       }}
     >
-      <div className='absolute top-0 inset-x-0 flex justify-end p-4 lg:py-8 lg:px-10'>
-        <p className='text-white text-[10px] lg:text-sm'>Click & Drag to Navigate</p>
+      <div className='absolute top-0 inset-x-0 flex justify-between p-4 lg:py-8 lg:px-10'>
+        <ul className='grid grid-cols-[repeat(auto-fit,1fr)]'>
+          <li className='rounded-full bg-white/50 text-sm size-6 font-medium text-primary inline-flex justify-center items-center select-none'>
+            0{activeSlideIndex + 1}
+          </li>
+        </ul>
+        <p className='text-white text-[10px] lg:text-sm select-none'>
+          Hold & Drag to Navigate
+        </p>
       </div>
       <div
         ref={sliderRef}
-        className='select-none z-[999] lg:overflow-auto lg:pt-8 lg:mb-8 lg:[&::-webkit-scrollbar]:hidden pt-4 mb-4'
+        className='select-none z-[999] overflow-auto lg:pt-8 lg:mb-8 [&::-webkit-scrollbar]:hidden pt-4 mb-4'
       >
         <div className='flex whitespace-nowrap overflow-visible before:block before:w-[20vw] before:grow-0 before:shrink-0 before:basis-[20vw] after:block after:w-[40vw] after:grow-0 after:shrink-0 after:basis-[40vw]'>
           {renderData}
