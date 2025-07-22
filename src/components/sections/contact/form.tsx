@@ -1,10 +1,10 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useState, useRef } from 'react'
+import { toast } from 'sonner'
 import cn from 'clsx'
 
 export function ContactForm() {
-  const [error, setError] = useState(null)
   const [pending, setPending] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -25,28 +25,32 @@ export function ContactForm() {
     })
       .then((res) => res.json())
       .then((resp) => {
-        if (resp.code === 200) setMessage('We received your submission, thank you!')
-        else setError(resp.message)
+        if (resp.code === 200) {
+          toast('We received your submission, thank you!')
+          if (formRef.current) formRef.current.reset()
+          setPending(false)
+        } else {
+          toast.error('An error occurred. Please retry again!')
+          setPending(false)
+        }
       })
       .catch((err) => {
-        setError(err.message ? err.message : error)
+        toast.error('An error occurred. Please retry again!')
+        console.log(err.message ? err.message : err)
+        setPending(false)
       })
-    setPending(false)
   }
   return (
-    <form onSubmit={handleSubmit} className='px-4 md:px-0' aria-label='Contact form'>
+    <form
+      onSubmit={handleSubmit}
+      ref={formRef}
+      className='px-4 md:px-0'
+      aria-label='Contact form'
+    >
       <div
         className='grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] [1fr_1fr_1fr] gap-4 lg:pt-6 lg:pb-12 xl:pt-10 xl:pb-16 [--g00:#ff98a200] [--g16:#ff98a229]'
         data-select2-id='select2-data-7-ibbe'
       >
-        {message && (
-          <div className='col-span-full'>
-            <p className='text-base lg:text-xl xl:text-2xl font-medium text-primary text-center'>
-              Your message has been received, I'll be sure to reply back as soon as
-              possible
-            </p>
-          </div>
-        )}
         <div
           className={cn(
             'group relative rounded-xl pr-5 overflow-hidden',
@@ -180,7 +184,7 @@ export function ContactForm() {
           />
           <button
             type='submit'
-            className='relative group-contact-button rounded-xl h-14 w-full overflow-y-hidden py-[18px] px-4 text-[var(--pink)] z-10 backdrop-blur-[28px] backdrop-opacity-10 hover:backdrop-opacity-100 font-medium text-base leading-[1.3] flex justify-center items-center focus:border-0 focus:ring-0 focus:outline-0'
+            className='relative group-contact-button cursor-pointer rounded-xl h-14 w-full overflow-y-hidden py-[18px] px-4 text-[var(--pink)] z-10 backdrop-blur-[28px] backdrop-opacity-10 hover:backdrop-opacity-100 font-medium text-base leading-[1.3] flex justify-center items-center focus:border-0 focus:ring-0 focus:outline-0'
           >
             {pending ? (
               <svg
