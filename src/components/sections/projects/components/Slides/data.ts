@@ -4,6 +4,7 @@ import GSF from '../../img/grow-strong-foundation.vercel.app.webp'
 import Telex from '../../img/telex.im.webp'
 import HelpMeOut from '../../img/helpmeout-chrome-extension.webp'
 import Africore from '../../img/africore.vercel.app.jpg'
+import AudioVisualizer from '../../img/3d-audio-visualizer.webp'
 
 const data = [
   {
@@ -13,6 +14,14 @@ const data = [
       'DevLinks allows users to create a personalized profile by adding their name, email, avatar, and links to various social media accounts. Once set up, users can share a live preview of their profile, giving others easy access to their connected platforms through a single, streamlined page.',
     image: devLinks,
     url: 'https://hng-11-stage05b.vercel.app',
+  },
+  {
+    name: '3d-audio-visualizer',
+    location: 'An audio player with 3D visualization',
+    description:
+      'This is a React Three Fiber implementation of “Coding a 3D Audio Visualizer with Three.js, GSAP & Web Audio API” by Filip Zrnzevic originally published on Codrops in June 2025.',
+    image: AudioVisualizer,
+    url: 'https://3d-audio-visualiza.netlify.app',
   },
   {
     name: 'Nayak E-Commerce',

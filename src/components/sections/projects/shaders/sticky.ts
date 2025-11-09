@@ -46,7 +46,7 @@ const stickyShader = {
       value: undefined,
     },
   },
-  fragmentShader: `
+  fragmentShader: /*glsl*/ `
     #define BORDER_WIDTH 0.015
 
     uniform sampler2D texImage;
@@ -104,7 +104,7 @@ const stickyShader = {
       gl_FragColor = vec4(finalTexture.xyz, opacity);
     }
   `,
-  vertexShader: `
+  vertexShader: /*glsl*/ `
     #define PI 3.14159265359
     varying vec2 vUv;
     uniform float offset;
