@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, CSSProperties } from 'react'
+import { useEffect, useRef, useCallback, CSSProperties, useState } from 'react'
 import { animated, useSpring, SpringValue, useTrail } from '@react-spring/web'
 import {
   useSpring as useSpringMotion,
@@ -17,15 +17,16 @@ import { clamp } from '@/utils/calc'
 
 gsap.registerPlugin(DrawSVGPlugin)
 
-const SLIDE_WIDTH_RATIO = 0.6
 const SLIDE_PADDING_RATIO = 0.1
 
 function Slides() {
   const { mouseStatus, mouseDownPos, activeSlideIndex, setActiveSlideIndex } =
     useMainStore()
+  const nodes = useRef<(HTMLDivElement | null)[]>([])
   const mouseStatusRef = useRef(mouseStatus)
   const mouseDownPosRef = useRef(mouseDownPos)
   const activeSlideIndexRef = useRef(activeSlideIndex)
+  const [slideWidth, setSlideWidth] = useState(0)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -37,27 +38,31 @@ function Slides() {
   let enterTween: gsap.core.Tween | null = null
   let leaveTween: gsap.core.Tween | null = null
 
-  const width = containerRef.current
-    ? containerRef.current?.getBoundingClientRect().width
-    : window.innerWidth
-  const minScrollLeft = width * SLIDE_PADDING_RATIO
+  // const slideWidth = nodes.current.map(node => node?.clientWidth).reduce((acc, sum, currIdx, array) => {
+  //   const newSum = (sum ?? 0)
+  //   const newAcc = (acc ?? 0)
+  //   if (currIdx === array.length - 1) {
+  //     return (newAcc + newSum) / array.length
+  //   }
+  //   return newAcc + newSum
+  // }, 0)
+  const minScrollLeft = slideWidth * SLIDE_PADDING_RATIO
 
   const { showSlide } = useSpring({
     showSlide: mouseStatus === 'mousedown' ? 1 : 0,
   })
 
   const onMouseMove = (event: PointerEvent) => {
+
     if (mouseStatusRef.current === 'mousedown') {
       const x = event.clientX
       const amountToScroll =
         initialScrollLeft.current - (x - mouseDownPosRef.current.x) * 2
       if (sliderRef.current) sliderRef.current.scrollLeft = amountToScroll
 
-      const slideWidth = width * SLIDE_WIDTH_RATIO
-
       const currentActiveSlideIndex = clamp(
         Math.floor(amountToScroll / slideWidth) +
-          (amountToScroll % slideWidth > slideWidth * 0.5 ? 1 : 0),
+        (amountToScroll % slideWidth > slideWidth * 0.5 ? 1 : 0),
         0,
         data.length - 1
       )
@@ -69,11 +74,17 @@ function Slides() {
   }
 
   const snapToCurrenActiveSlide = useCallback(() => {
-    const slideWidth = width * SLIDE_WIDTH_RATIO
     if (sliderRef.current)
       sliderRef.current.scrollLeft =
         minScrollLeft + activeSlideIndexRef.current * slideWidth
-  }, [minScrollLeft, activeSlideIndexRef])
+  }, [activeSlideIndexRef, slideWidth, minScrollLeft])
+
+  useEffect(() => {
+    console.log(minScrollLeft)
+    if (sliderRef.current)
+      sliderRef.current.scrollLeft =
+        minScrollLeft
+  }, [slideWidth])
 
   useEffect(() => {
     if (mouseStatus === 'mousedown') {
@@ -157,24 +168,31 @@ function Slides() {
   const getDescriptionStyle = (index: number) =>
     index === activeSlideIndexRef.current
       ? {
-          opacity: showSlide.to((value) => 1 - value),
-          transform: showSlide.to((value) => `translateX(-${value * 10}%)`),
-        }
+        opacity: showSlide.to((value) => 1 - value),
+        transform: showSlide.to((value) => `translateX(-${value * 10}%)`),
+      }
       : { opacity: 0 }
 
   const renderData = data.map((entry, index) => (
     <animated.div
       key={`slide-${index}`}
+      ref={(node) => {
+        if (node) {
+          nodes.current = nodes.current.includes(node) ? nodes.current : [...nodes.current, node]
+          if (slideWidth === 0) setSlideWidth(node.clientWidth)
+        }
+      }
+      }
       data-slide-active={index === activeSlideIndex}
-      className='slide w-[60vw] grow-0 shrink-0 basis-[60vw] text-white pr-[10vw] whitespace-break-spaces'
+      className='slide w-[60vw] grow-0 shrink-0 basis-[60vw] text-white pr[10vw] whitespace-break-spaces flex justify-end'
       style={
         index !== activeSlideIndexRef.current
           ? {
-              opacity: showSlide as unknown as SpringValue<number>,
-              transform: showSlide.to(
-                (value) => `translateX(${(1 - value) * 10}%)`
-              ) as unknown as SpringValue<string>,
-            }
+            opacity: showSlide as unknown as SpringValue<number>,
+            transform: showSlide.to(
+              (value) => `translateX(${(1 - value) * 10}%)`
+            ) as unknown as SpringValue<string>,
+          }
           : ({} as CSSProperties)
       }
     >
@@ -231,11 +249,11 @@ function Slides() {
           style={
             mouseStatusRef.current === 'mousedown'
               ? {
-                  color:
-                    index === activeSlideIndex ? 'var(--color-primary)' : 'currentColor',
-                  opacity: showSlide.to((value) => value * 0.3),
-                  transform: showSlide.to((value) => `translateX(-${value * 10}%)`),
-                }
+                color:
+                  index === activeSlideIndex ? 'var(--color-primary)' : 'currentColor',
+                opacity: showSlide.to((value) => value * 0.3),
+                transform: showSlide.to((value) => `translateX(-${value * 10}%)`),
+              }
               : { opacity: 0 }
           }
         >
@@ -268,7 +286,7 @@ function Slides() {
         ref={sliderRef}
         className='select-none z-[999] overflow-auto lg:pt-8 lg:mb-8 [&::-webkit-scrollbar]:hidden pt-4 mb-4'
       >
-        <div className='flex whitespace-nowrap overflow-visible before:block before:w-[20vw] before:grow-0 before:shrink-0 before:basis-[20vw] after:block after:w-[40vw] after:grow-0 after:shrink-0 after:basis-[40vw]'>
+        <div className='flex *:w-full *:basis-full gridauto-row-autogrid-flow-col whitespace-nowrap overflow-visible'>
           {renderData}
         </div>
       </div>

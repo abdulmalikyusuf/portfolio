@@ -6,7 +6,7 @@ export function About() {
           <div className='relative'>
             <div className='sticky top-24'>
               <div className='pb-10 lg:pb-0'>
-                <div className='overflow-hidden'>
+                <div className=''>
                   <span className='base-label text-current flex leading-4 tagline l font-bold text-lg lg:text-xl'>
                     <svg
                       viewBox='0 0 6 6'
